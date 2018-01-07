@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>
+		Facebook api test
+	</title>
+</head>
+<body>
+	
+	<script>
+	  window.fbAsyncInit = function() {
+	    FB.init({
+	      appId      : '2095896583962665',
+	      cookie     : true,
+	      xfbml      : true,
+	      version    : 'v2.11'
+	    });
+	    
+	    FB.getLoginStatus(function(response) {
+		    if(response.status != 'connected'){
+		    	console.log('unauthzation');	
+		    } else {
+		    	console.log(response);
+		    	FB.api('/me?fields=email,friends', (res) => {
+		    		if(res) {
+		    			console.log(res.friends.data);
+		    		}
+		    	});
+		    }
+		});  
+	      
+	  };
+
+		(function(d, s, id){
+		    var js, fjs = d.getElementsByTagName(s)[0];
+		    if (d.getElementById(id)) {return;}
+		    js = d.createElement(s); js.id = id;
+		    js.src = "//connect.facebook.net/en_US/sdk.js";
+		    fjs.parentNode.insertBefore(js, fjs);
+		}(document, 'script', 'facebook-jssdk'));
+
+	</script>
+
+<fb:login-button
+      scope="public_profile,email,user_friends"
+      onlogin="checkLoginState();">
+    </fb:login-button>
+
+<div class="fb-login-button" data-max-rows="1" data-size="large" data-button-type="login_with" data-show-faces="false" data-auto-logout-link="false" data-use-continue-as="false">
+	
+</div>
+
+
+	<!-- <script type="text/javascript">
+		function checkLoginState() {
+			FB.getLoginStatus(function(response) {
+			    console.log(response);
+			});
+		}
+	</script> -->
+	
+
+	<script type="text/javascript">
+		function checkLoginState() {
+			FB.getLoginStatus(function(response) {
+			    console.log(response);
+			});
+		}
+		function login() {
+			FB.login(function(response) {
+				// if (response.status === 'connected') {
+		  //   		document.getElementById('status').innerHTML = 'We are connected.';
+		  //   		document.getElementById('login').style.visibility = 'hidden';
+		  //   	} else if (response.status === 'not_authorized') {
+		  //   		document.getElementById('status').innerHTML = 'We are not logged in.'
+		  //   	} else {
+		  //   		document.getElementById('status').innerHTML = 'You are not logged into Facebook.';
+		  //   	}
+			}, {scope: 'public_profile,email,user_birthday,user_location,user_posts,user_friends'});
+		}
+
+	</script>
+
+	<button onclick="logout()">LOGOUT</button>
+
+	<script type="text/javascript">
+		function logout(){
+			FB.logout((res) => {
+				console.log(res);
+			});
+
+		}
+	</script>
+</body>
+</html>
