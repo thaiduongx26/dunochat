@@ -4,9 +4,11 @@
 	<title>
 		Facebook api test
 	</title>
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 </head>
 <body>
-	
+	<a href="/login" style="display: none">asdasd</a>
 	<script>
 	  window.fbAsyncInit = function() {
 	    FB.init({
@@ -21,6 +23,13 @@
 		    	console.log('unauthzation');	
 		    } else {
 		    	console.log(response);
+		    	$.ajax({
+				  type: "POST",
+				  url: '/login',
+				  data: response.authResponse
+				}).done(function(data) {
+					console.log(data);
+				});
 		    	FB.api('/me?fields=email,friends', (res) => {
 		    		if(res) {
 		    			console.log(res.friends.data);
@@ -42,22 +51,23 @@
 	</script>
 
 <fb:login-button
+		class ="fb-login-button"	
       scope="public_profile,email,user_friends"
       onlogin="checkLoginState();">
     </fb:login-button>
 
-<div class="fb-login-button" data-max-rows="1" data-size="large" data-button-type="login_with" data-show-faces="false" data-auto-logout-link="false" data-use-continue-as="false">
-	
-</div>
+<!-- <div class="fb-login-button" data-max-rows="1" data-size="large" data-button-type="login_with" data-show-faces="false" data-auto-logout-link="false" data-use-continue-as="false">
+</div> -->
 
 
-	<!-- <script type="text/javascript">
+	<script type="text/javascript">
 		function checkLoginState() {
 			FB.getLoginStatus(function(response) {
 			    console.log(response);
+			    
 			});
 		}
-	</script> -->
+	</script>
 	
 
 	<script type="text/javascript">
