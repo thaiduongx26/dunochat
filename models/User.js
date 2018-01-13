@@ -5,7 +5,7 @@ mongoose.Promise = global.Promise;
 mongoose.connect('mongodb://localhost:27017/User');
 
 var UserSchema = new mongoose.Schema({
-	userID: Number,
+	userID: String,
 	name: String,
 	email: String,
 	avatar: String,

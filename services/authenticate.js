@@ -23,7 +23,6 @@ var isAuth = function(req, res, next) {
 			if (data) {
 				if (!User.findOne({
 					userId: data.userId,
-					token_access: data.token_access,
 					"tokens.token": token
 				})) {
 					res.status(401).send({

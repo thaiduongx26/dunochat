@@ -20,7 +20,7 @@ router.post('/', (req, res) => {
 
 	getDataByToken(access_token, (err, resfb, bodyfb) => {
 		var body = JSON.parse(bodyfb);
-		console.log(body)
+		// console.log(body);
 		if(err || (resfb.statusCode != 200) || userID != body.id){
 			// console.log(body.id);
 			res.status(401).send({
@@ -40,13 +40,6 @@ router.post('/', (req, res) => {
 						message:"Unauthorized"
 					});
 				} else {
-
-					var newToken = jwt.sign({
-						userID: body.id,
-						access_token: access_token,
-						date: Date.now()
-					}, privateKey);
-
 					if(!data) {
 						var newUser = new User({
 							name: body.name,
@@ -66,33 +59,23 @@ router.post('/', (req, res) => {
 									code: 401,
 									message:"Unauthorized"
 								});
-							} else {
+							}else{
+								var newToken = jwt.sign({
+									id: newUser._id,
+									userID: body.id,
+									email: body.email,
+									date: Date.now()
+								}, privateKey);
 								res.header("Set-Cookie", newToken).status(200).send({
 									code:200,
+									id: newUser._id,
 									message: "Success",
 									token: newToken
 								});
 							}
 						})
+						
 					} else {
-						// data.name = body.name;
-						// data.tokens.push(newToken);
-						// console.log(data);
-						// data.save((err) => {
-						// 	if(err) {
-						// 		// console.log(err);
-								// res.status(401).send({
-								// 	code: 401,
-								// 	message:"Unauthorized"
-								// });
-						// 	} else {
-								// res.header("Set-Cookie", newToken).status(200).send({
-								// 	code:200,
-								// 	message: "Success",
-								// 	token: newToken
-								// });
-						// 	}
-						// })
 						User.update(data, {$push: {tokens: {token: newToken}}, name: body.name, access_token: access_token, avatar: body.picture.data.url}, (err, raw) => {
 							if(err) {
 								res.status(401).send({
@@ -100,8 +83,15 @@ router.post('/', (req, res) => {
 									message:"Unauthorized"
 								});
 							} else {
+								var newToken = jwt.sign({
+									id: newUser._id,
+									userID: body.id,
+									email: body.email,
+									date: Date.now()
+								}, privateKey);
 								res.header("Set-Cookie", newToken).status(200).send({
 									code:200,
+									id: data._id,
 									message: "Success",
 									token: newToken
 								});
@@ -110,6 +100,8 @@ router.post('/', (req, res) => {
 					}
 				}
 			})
+
+
 		}
 
 		

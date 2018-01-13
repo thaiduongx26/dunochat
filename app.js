@@ -4,6 +4,7 @@ var path = require('path');
 var app = express();
 var request = require('request');
 // var getDataByToken = require('./FB-methods/fb-methods.js').getDataByToken;
+var socket = require('socket.io');
 var loginRouter = require('./services/login.js');
 var searchRouter = require('./services/search.js')
 
